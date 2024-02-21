@@ -10,12 +10,13 @@ import (
 )
 
 type Server struct {
-	Name    string `json:"name"`
-	Addr    string `json:"addr"`    //服务地址
-	Version string `json:"version"` //服务版本
-	Weight  int64  `json:"weight"`  //服务权重
+	Name    string `json:"name"`    // 服务名称
+	Addr    string `json:"addr"`    // 服务地址
+	Version string `json:"version"` // 服务版本
+	Weight  int64  `json:"weight"`  // 服务权重
 }
 
+// BuildPrefix 构建服务前缀
 func BuildPrefix(info Server) string {
 	if info.Version == "" {
 		return fmt.Sprintf("/%s/", info.Name)
@@ -23,10 +24,12 @@ func BuildPrefix(info Server) string {
 	return fmt.Sprintf("/%s/%s/", info.Name, info.Version)
 }
 
+// BuildRegPath 构建注册路径
 func BuildRegPath(info Server) string {
 	return fmt.Sprintf("%s%s", BuildPrefix(info), info.Addr)
 }
 
+// ParseValue 解析服务信息
 func ParseValue(value []byte) (Server, error) {
 	info := Server{}
 	if err := json.Unmarshal(value, &info); err != nil {
@@ -35,6 +38,7 @@ func ParseValue(value []byte) (Server, error) {
 	return info, nil
 }
 
+// SplitPath 解析注册路径
 func SplitPath(path string) (Server, error) {
 	info := Server{}
 	strs := strings.Split(path, "/")
@@ -46,6 +50,7 @@ func SplitPath(path string) (Server, error) {
 }
 
 // Exist helper function
+// Exist 判断服务地址是否存在
 func Exist(l []resolver.Address, addr resolver.Address) bool {
 	for i := range l {
 		if l[i].Addr == addr.Addr {
@@ -56,8 +61,10 @@ func Exist(l []resolver.Address, addr resolver.Address) bool {
 }
 
 // Remove helper function
+// Remove 删除服务地址
 func Remove(s []resolver.Address, addr resolver.Address) ([]resolver.Address, bool) {
 	for i := range s {
+		// 如果地址匹配
 		if s[i].Addr == addr.Addr {
 			s[i] = s[len(s)-1]
 			return s[:len(s)-1], true
@@ -66,6 +73,7 @@ func Remove(s []resolver.Address, addr resolver.Address) ([]resolver.Address, bo
 	return nil, false
 }
 
+// BuildResolverUrl 构建解析器URL
 func BuildResolverUrl(app string) string {
 	return schema + ":///" + app
 }
