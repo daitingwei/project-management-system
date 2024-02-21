@@ -4,8 +4,10 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
+	"crypto/rand"
 	"encoding/hex"
 	"io"
+	"math/big"
 	"strconv"
 )
 
@@ -19,19 +21,37 @@ var commonIV = []byte{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
 
 const AESKey = "sdfgyrhgbxcdgryfhgywertd"
 
+func CreateUUID() string {
+	chars := []byte("0123456789abcdefghijklmnopqrstuvwxyz")
+	length := 24
+	result := make([]byte, length)
+	for i := 0; i < length; i++ {
+		index, _ := rand.Int(rand.Reader, big.NewInt(int64(len(chars))))
+		result[i] = chars[index.Int64()]
+	}
+	return string(result)
+}
+
+// 解密字符串并转换为int64，忽略错误
 func DecryptNoErr(cipherStr string) int64 {
 	decrypt, _ := Decrypt(cipherStr, AESKey)
 	parseInt, _ := strconv.ParseInt(decrypt, 10, 64)
 	return parseInt
 }
+
+// 加密int64并返回字符串，忽略错误
 func EncryptNoErr(id int64) string {
 	str, _ := EncryptInt64(id, AESKey)
 	return str
 }
+
+// EncryptInt64 加密int64并返回字符串
 func EncryptInt64(id int64, keyText string) (cipherStr string, err error) {
 	idStr := strconv.FormatInt(id, 10)
 	return Encrypt(idStr, keyText)
 }
+
+// Encrypt 加密字符串并返回字符串
 func Encrypt(plainText string, keyText string) (cipherStr string, err error) {
 	// 转换成字节数据, 方便加密
 	plainByte := []byte(plainText)
@@ -41,13 +61,15 @@ func Encrypt(plainText string, keyText string) (cipherStr string, err error) {
 	if err != nil {
 		return "", err
 	}
-	//加密字符串
+	// 加密字符串
 	cfb := cipher.NewCFBEncrypter(c, commonIV)
 	cipherByte := make([]byte, len(plainByte))
 	cfb.XORKeyStream(cipherByte, plainByte)
 	cipherStr = hex.EncodeToString(cipherByte)
 	return
 }
+
+// Decrypt 解密字符串并返回字符串
 func Decrypt(cipherStr string, keyText string) (plainText string, err error) {
 	// 转换成字节数据, 方便加密
 	keyByte := []byte(keyText)
