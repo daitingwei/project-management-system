@@ -49,6 +49,9 @@ web/project-project/project-project
 web/project-project/project-project-new
 web/project-user/project-user
 
+# 原始版本目录（不提交）
+后端/
+
 # Frontend build cache
 前端/node_modules/.cache/
 
