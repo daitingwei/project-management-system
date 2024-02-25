@@ -3,7 +3,6 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/resolver"
@@ -13,16 +12,15 @@ import (
 	"test.com/project-common/logs"
 	"test.com/project-grpc/user/login"
 	"test.com/project-user/config"
+	"test.com/project-user/internal/interceptor"
 	loginServiceV1 "test.com/project-user/pkg/service/login.service.v1"
 )
 
-//Router 接口
 type Router interface {
 	Route(r *gin.Engine)
 }
 
-type RegisterRouter struct {
-}
+type RegisterRouter struct{}
 
 func New() *RegisterRouter {
 	return &RegisterRouter{}
@@ -35,8 +33,6 @@ func (*RegisterRouter) Route(ro Router, r *gin.Engine) {
 var routers []Router
 
 func InitRouter(r *gin.Engine) {
-	//rg := New()
-	//rg.Route(&user.RouterUser{}, r)
 	for _, ro := range routers {
 		ro.Route(r)
 	}
@@ -51,21 +47,28 @@ type gRPCConfig struct {
 	RegisterFunc func(*grpc.Server)
 }
 
+// RegisterGrpc 注册gRPC服务
+// 修改说明：修改grpc拦截器链，移除otelemetry链路追踪拦截器
+// 背景：简化拦截器链，只保留缓存拦截器以提升性能
+// 修改点：
+// 1. 移除了otelgrpc.UnaryServerInterceptor()链路追踪拦截器
+// 2. 仅保留interceptor.New().CacheInterceptor()缓存拦截器
+// 注意：如需启用链路追踪，需在go.mod中添加otelemetry相关依赖并重新配置
 func RegisterGrpc() *grpc.Server {
-	//0.0.0.0:8881
 	c := gRPCConfig{
 		Addr: config.C.GC.Addr,
 		RegisterFunc: func(g *grpc.Server) {
 			login.RegisterLoginServiceServer(g, loginServiceV1.New())
 		}}
-	s := grpc.NewServer(grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-		otelgrpc.UnaryServerInterceptor(),
-		//interceptor.New().CacheInterceptor(),
-	)))
+	s := grpc.NewServer(
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			interceptor.New().CacheInterceptor(),
+		)),
+	)
 	c.RegisterFunc(s)
 	lis, err := net.Listen("tcp", c.Addr)
 	if err != nil {
-		log.Println("cannot listen")
+		log.Fatalf("cannot listen on %s: %v", c.Addr, err)
 	}
 	go func() {
 		log.Printf("grpc server started as: %s \n", c.Addr)
@@ -81,7 +84,7 @@ func RegisterGrpc() *grpc.Server {
 func RegisterEtcdServer() {
 	etcdRegister := discovery.NewResolver(config.C.EtcdConfig.Addrs, logs.LG)
 	resolver.Register(etcdRegister)
-	//服务地址:8881
+
 	info := discovery.Server{
 		Name:    config.C.GC.Name,
 		Addr:    config.C.GC.EtcdAddr,
