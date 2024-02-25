@@ -2,9 +2,11 @@ package dao
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
-	"test.com/project-user/config"
 	"time"
+
+	"github.com/go-redis/redis/v8"
+
+	"test.com/project-user/config"
 )
 
 var Rc *RedisCache
@@ -27,4 +29,8 @@ func (rc *RedisCache) Put(ctx context.Context, key, value string, expire time.Du
 func (rc *RedisCache) Get(ctx context.Context, key string) (string, error) {
 	result, err := rc.rdb.Get(ctx, key).Result()
 	return result, err
+}
+func (rc *RedisCache) Del(ctx context.Context, key string) error {
+	err := rc.rdb.Del(ctx, key).Err()
+	return err
 }

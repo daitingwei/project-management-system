@@ -1,11 +1,13 @@
 package config
 
 import (
+	"bytes"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"log"
 	"os"
 	"test.com/project-common/logs"
+	"test.com/project-common/nacos"
 )
 
 var C = InitConfig()
@@ -30,7 +32,7 @@ type ServerConfig struct {
 
 type GrpcConfig struct {
 	Name     string
-	Addr     string
+	Addr    string
 	Version  string
 	Weight   int64
 	EtcdAddr string
@@ -56,28 +58,61 @@ type JwtConfig struct {
 }
 
 func InitConfig() *Config {
+	// InitConfig 初始化配置
+	// 修改说明：使用新的nacos客户端封装，支持配置热更新
+	// 背景：
+	// 1. 使用project-common模块中重构的nacos封装，提供更简洁的API
+	// 2. 支持配置热更新：nacos配置变更时自动重新加载
+	// 3. 优先从nacos读取配置，读取失败则回退到本地配置文件
 	conf := &Config{viper: viper.New()}
-	workDir, _ := os.Getwd()
-	conf.viper.SetConfigName("config")
-	conf.viper.SetConfigType("yaml")
-	// /Initial/config/config.yaml
-	conf.viper.AddConfigPath(workDir + "/config")
-	err := conf.viper.ReadInConfig()
-	if err != nil {
-		log.Fatalln(err)
+	//先从nacos读取配置，如果读取不到 在本地读取
+	bootConf := nacos.InitBootstrap()
+	nacosClient := nacos.NewConfigClient(bootConf)
+	configYaml, err2 := nacosClient.GetConfig()
+	if err2 != nil {
+		log.Fatalln(err2)
 	}
-	conf.ReadServerConfig()
-	conf.InitZapLog()
-	conf.ReadGrpcConfig()
-	conf.ReadEtcdConfig()
-	conf.InitMysqlConfig()
-	conf.InitJwtConfig()
-	conf.InitJaegerConfig()
+	err2 = nacosClient.ListenConfig(func(namespace, group, dataId, data string) {
+		log.Printf("load nacos config changed %s \n", data)
+		err := conf.viper.ReadConfig(bytes.NewBuffer([]byte(data)))
+		if err != nil {
+			log.Printf("load nacos config changed err : %s \n", err.Error())
+		}
+		conf.ReLoadAllConfig()
+	})
+	if err2 != nil {
+		log.Fatalln(err2)
+	}
+	conf.viper.SetConfigType("yaml")
+	if configYaml != "" {
+		err := conf.viper.ReadConfig(bytes.NewBuffer([]byte(configYaml)))
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		workDir, _ := os.Getwd()
+		conf.viper.SetConfigName("config")
+		conf.viper.AddConfigPath(workDir + "/config")
+		err := conf.viper.ReadInConfig()
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+	conf.ReLoadAllConfig()
 	return conf
 }
 
+func (c *Config) ReLoadAllConfig() {
+	c.ReadServerConfig()
+	c.InitZapLog()
+	c.ReadGrpcConfig()
+	c.ReadEtcdConfig()
+	c.InitMysqlConfig()
+	c.InitJwtConfig()
+	c.InitJaegerConfig()
+}
+
 func (c *Config) InitZapLog() {
-	//从配置中读取日志配置，初始化日志
 	lc := &logs.LogConfig{
 		DebugFileName: c.viper.GetString("zap.debugFileName"),
 		InfoFileName:  c.viper.GetString("zap.infoFileName"),
@@ -128,22 +163,20 @@ func (c *Config) ReadEtcdConfig() {
 	c.EtcdConfig = ec
 }
 func (c *Config) InitMysqlConfig() {
-	mc := &MysqlConfig{
-		Username: c.viper.GetString("mysql.username"),
-		Password: c.viper.GetString("mysql.password"),
-		Host:     c.viper.GetString("mysql.host"),
-		Port:     c.viper.GetInt("mysql.port"),
-		Db:       c.viper.GetString("mysql.db"),
-	}
+	mc := &MysqlConfig{}
+	mc.Username = c.viper.GetString("mysql.username")
+	mc.Password = c.viper.GetString("mysql.password")
+	mc.Host = c.viper.GetString("mysql.host")
+	mc.Port = c.viper.GetInt("mysql.port")
+	mc.Db = c.viper.GetString("mysql.db")
 	c.MysqlConfig = mc
 }
 func (c *Config) InitJwtConfig() {
-	mc := &JwtConfig{
-		AccessSecret:  c.viper.GetString("jwt.accessSecret"),
-		AccessExp:     c.viper.GetInt64("jwt.accessExp"),
-		RefreshExp:    c.viper.GetInt64("jwt.refreshExp"),
-		RefreshSecret: c.viper.GetString("jwt.refreshSecret"),
-	}
+	mc := &JwtConfig{}
+	mc.AccessSecret = c.viper.GetString("jwt.accessSecret")
+	mc.AccessExp = c.viper.GetInt64("jwt.accessExp")
+	mc.RefreshExp = c.viper.GetInt64("jwt.refreshExp")
+	mc.RefreshSecret = c.viper.GetString("jwt.refreshSecret")
 	c.JwtConfig = mc
 }
 
