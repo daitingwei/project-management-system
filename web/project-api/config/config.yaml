@@ -1,0 +1,21 @@
+server:
+  name: "project-api"
+  addr: "0.0.0.0:8088"
+zap:
+  debugFileName: "/Users/daitingwei/Desktop/第二版/logs/project-api/debug.log"
+  infoFileName: "/Users/daitingwei/Desktop/第二版/logs/project-api/info.log"
+  warnFileName: "/Users/daitingwei/Desktop/第二版/logs/project-api/error.log"
+  maxSize: 500,
+  maxAge: 28,
+  MaxBackups: 3
+etcd:
+  addrs:
+    - "127.0.0.1:2379"
+jaeger:
+  endpoints: "http://localhost:14268/api/traces"
+minio:
+  endpoint: "localhost:9009"
+  accessKey: "admin"
+  secretKey: "admin123456"
+  bucket: "msproject"
+  useSSL: false
