@@ -11,7 +11,7 @@
 - **缓存**：Redis
 - **消息队列**：Kafka
 - **配置中心**：Nacos
-- **服务发现**：Consul
+- **服务发现**：Etcd
 - **链路追踪**：Jaeger
 - **对象存储**：MinIO
 
@@ -166,16 +166,3 @@ docker-compose logs -f
 ## 许可证
 
 Apache License 2.0
-
-## 联系方式
-
-- 作者：代庭玮
-- 邮箱：dai2004105@163.com
-- GitHub：https://github.com/daitingwei/project-management-system
-
-## 更新日志
-
-### v1.0.0 (2024-03-24)
-- 初始化项目
-- 添加基础功能模块
-- 配置开发环境
