@@ -1,0 +1,67 @@
+syntax = "proto3";
+package department.service.v1;
+option go_package = "test.com/project-grpc/department";
+
+message DepartmentReqMessage {
+  int64 memberId = 1;
+  string organizationCode = 2;
+  int64 page = 3;
+  int64 pageSize = 4;
+  string departmentCode = 5;
+  string parentDepartmentCode = 6;
+  string name = 7;
+  string keyword = 8;
+  string accountCode = 9;
+}
+
+message DepartmentMessage{
+  int64 id = 1;
+  string code = 2;
+  string OrganizationCode = 3;
+  string Name = 4;
+  string createTime = 5;
+  string pcode = 6;
+  string path = 7;
+}
+
+message ListDepartmentMessage{
+  repeated DepartmentMessage list = 1;
+  int64 total = 2;
+}
+
+message DeleteDepartmentResponse{}
+
+message DepartmentMemberMessage{
+  int64 id = 1;
+  string name = 2;
+  string avatar = 3;
+  string email = 4;
+  string code = 5;
+  int32 isPrincipal = 6;
+  string accountCode = 7;
+  bool joined = 8;
+}
+
+message DepartmentMemberListResponse{
+  repeated DepartmentMemberMessage list = 1;
+  int64 total = 2;
+}
+
+message DepartmentMemberDetailResponse{
+  DepartmentMemberMessage member = 1;
+}
+
+message InviteDepartmentMemberResponse{}
+message RemoveDepartmentMemberResponse{}
+
+service DepartmentService {
+  rpc Save(DepartmentReqMessage) returns(DepartmentMessage){}
+  rpc Read(DepartmentReqMessage) returns(DepartmentMessage){}
+  rpc List(DepartmentReqMessage) returns(ListDepartmentMessage){}
+  rpc DeleteDepartment(DepartmentReqMessage) returns(DeleteDepartmentResponse){}
+  rpc DepartmentMemberList(DepartmentReqMessage) returns(DepartmentMemberListResponse){}
+  rpc SearchDepartmentMember(DepartmentReqMessage) returns(DepartmentMemberListResponse){}
+  rpc InviteDepartmentMember(DepartmentReqMessage) returns(InviteDepartmentMemberResponse){}
+  rpc RemoveDepartmentMember(DepartmentReqMessage) returns(RemoveDepartmentMemberResponse){}
+  rpc DepartmentMemberDetail(DepartmentReqMessage) returns(DepartmentMemberDetailResponse){}
+}
