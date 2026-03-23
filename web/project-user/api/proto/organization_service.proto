@@ -1,0 +1,28 @@
+syntax = "proto3";
+package organization.service.v1;
+option go_package = "test.com/project-grpc/organization";
+
+message OrganizationReqMessage {
+  int64 memberId = 1;
+  string organizationCode = 2;
+  string name = 3;
+  string avatar = 4;
+  string address = 5;
+  int32 province = 6;
+  int32 city = 7;
+  int32 area = 8;
+}
+
+message OrganizationRespMessage {
+  int64 id = 1;
+  string name = 2;
+  string avatar = 3;
+  string address = 4;
+  int32 personal = 5;
+  int64 memberId = 6;
+}
+
+service OrganizationService {
+  rpc SaveOrganization(OrganizationReqMessage) returns(OrganizationRespMessage){}
+  rpc UpdateOrganization(OrganizationReqMessage) returns(OrganizationRespMessage){}
+}
