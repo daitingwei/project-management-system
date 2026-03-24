@@ -1,0 +1,53 @@
+server:
+  name: "project-project"
+  addr: "0.0.0.0:8081"
+zap:
+  debugFileName: "/logs/debug/project-project-debug.log"
+  infoFileName: "/logs/info/project-project-info.log"
+  warnFileName: "/logs/error/project-project-error.log"
+  maxSize: 500,
+  maxAge: 28,
+  MaxBackups: 3
+redis:
+  host: "redis6"
+  port: 6379
+  password: ""
+  db: 0
+grpc:
+  addr: "0.0.0.0:8882"
+  name: "project"
+  version: "1.0.0"
+  weight: 2
+etcd:
+  addrs:
+    - "etcd-node1:2379"
+    - "etcd-node2:2379"
+    - "etcd-node3:2379"
+mysql:
+  username: root
+  password: root
+  host: mysql8
+  port: 3306
+  db: msproject
+db:
+  separation: true
+  master:
+    name: master
+    username: root
+    password: root
+    host: mysql8
+    port: 3306
+    db: msproject
+  slave:
+    - username: root
+      password: root
+      host: mysql8-slave1
+      port: 3306
+      db: msproject
+      name: slave1
+    - username: root
+      password: root
+      host: mysql8-slave2
+      port: 3306
+      db: msproject
+      name: slave2

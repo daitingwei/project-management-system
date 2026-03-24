@@ -1,0 +1,25 @@
+# Trae IDE 索引排除配置
+# 跳过大型文件和不需要索引的目录，提升索引速度
+
+# 数据目录
+data/
+data/**/*
+
+# Docker 导出文件（包含大型镜像）
+docker-export-*/
+docker-export-*/**/*
+
+# 编译输出目录
+target/
+target/**/*
+
+# Git 仓库
+.git/
+.git/**/*
+
+# 大型 SQL 文件（根据需要可注释掉）
+*.sql
+
+# 依赖目录（如果有）
+node_modules/
+vendor/

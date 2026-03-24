@@ -1,9 +1,9 @@
 go 1.18
 
 use (
-	./project-api
-	./project-common
-	./project-user
-	./project-grpc
-	./project-project
+	web/project-api
+	web/project-common
+	web/project-user
+	web/project-grpc
+	web/project-project
 )
