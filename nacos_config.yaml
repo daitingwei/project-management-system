@@ -1,0 +1,54 @@
+server:
+  name: "project-project"
+  addr: "127.0.0.1:8081"
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  db: 0
+grpc:
+  etcdAddr: "127.0.0.1:8882"
+  addr: "127.0.0.1:8882"
+  name: "project"
+  version: "1.0.0"
+  weight: 2
+etcd:
+  addrs:
+    - "127.0.0.1:2379"
+    - "127.0.0.1:2381"
+    - "127.0.0.1:2383"
+mysql:
+  username: root
+  password: dtw258989971
+  host: 127.0.0.1
+  port: 3309
+  db: msproject
+db:
+  separation: true
+  master:
+    name: master
+    username: root
+    password: dtw258989971
+    host: 127.0.0.1
+    port: 3309
+    db: msproject
+  slave:
+    - username: root
+      password: dtw258989971
+      host: 127.0.0.1
+      port: 3310
+      db: msproject
+      name: slave1
+    - username: root
+      password: dtw258989971
+      host: 127.0.0.1
+      port: 3311
+      db: msproject
+      name: slave2
+jwt:
+  accessExp: 7
+  refreshExp: 14
+  accessSecret: msproject
+  refreshSecret: ms_project
+jaeger:
+  endpoints: "http://localhost:14268/api/traces"

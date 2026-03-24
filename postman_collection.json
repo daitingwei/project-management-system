@@ -1,0 +1,201 @@
+{
+  "info": {
+    "name": "MS Project API - All Interfaces",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8088" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Login",
+      "item": [
+        { "name": "getCaptcha", "request": { "method": "POST", "header": [], "url": "{{base_url}}/project/login/getCaptcha", "body": { "mode": "raw", "raw": "{\"mobile\":\"13800000000\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "register", "request": { "method": "POST", "header": [], "url": "{{base_url}}/project/login/register", "body": { "mode": "raw", "raw": "{\"name\":\"testuser\",\"mobile\":\"13800000000\",\"password\":\"123456\",\"captcha\":\"1234\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "login", "event": [{"listen":"test","script":{"exec":["var r=pm.response.json();if(r.data&&r.data.token){pm.collectionVariables.set('token',r.data.token);}"],"type":"text/javascript"}}], "request": { "method": "POST", "header": [], "url": "{{base_url}}/project/login", "body": { "mode": "raw", "raw": "{\"mobile\":\"13800000000\",\"password\":\"123456\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "logout", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/login/_out", "body": { "mode": "raw", "raw": "{}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Organization",
+      "item": [
+        { "name": "_getOrgList", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/organization/_getOrgList", "body": { "mode": "raw", "raw": "{}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "save", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/organization/save", "body": { "mode": "raw", "raw": "{\"name\":\"My Org\",\"avatar\":\"\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/organization/edit", "body": { "mode": "raw", "raw": "{\"code\":\"xxx\",\"name\":\"New Name\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Index",
+      "item": [
+        { "name": "index", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/index", "body": { "mode": "raw", "raw": "{}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Project",
+      "item": [
+        { "name": "selfList", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/selfList", "body": { "mode": "raw", "raw": "{\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "save", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/save", "body": { "mode": "raw", "raw": "{\"name\":\"Test Project\",\"description\":\"desc\",\"cover\":\"\",\"stageCode\":\"\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "read", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/read", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recycle", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/recycle", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recovery", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/recovery", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "collect", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project_collect/collect", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"collectType\":\"collect\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/edit", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"name\":\"New Name\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "getLog", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/getLogBySelfProject", "body": { "mode": "raw", "raw": "{\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "quit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/quit", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "archive", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/archive", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recoveryArchive", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/recoveryArchive", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "delete", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/delete", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "analysis", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/analysis", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "_projectStats", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/_projectStats", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "_getProjectReport", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project/_getProjectReport", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "ProjectMember",
+      "item": [
+        { "name": "index", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project_member/index", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "searchInvite", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project_member/searchInviteMember", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"keyword\":\"test\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "invite", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project_member/inviteMember", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"memberCodes\":[\"xxx\"]}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "_joinByInviteLink", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project_member/_joinByInviteLink", "body": { "mode": "raw", "raw": "{\"inviteCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "removeMember", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project_member/removeMember", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"memberCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "_listForInvite", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/project_member/_listForInvite", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "TaskStages",
+      "item": [
+        { "name": "list", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_stages", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "save", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_stages/save", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"name\":\"Stage 1\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_stages/edit", "body": { "mode": "raw", "raw": "{\"stageCode\":\"xxx\",\"name\":\"New Name\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "delete", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_stages/delete", "body": { "mode": "raw", "raw": "{\"stageCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "sort", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_stages/sort", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"sortList\":[{\"stageCode\":\"xxx\",\"sort\":1}]}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "tasks", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_stages/tasks", "body": { "mode": "raw", "raw": "{\"stageCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Task",
+      "item": [
+        { "name": "save", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/save", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"stageCode\":\"xxx\",\"name\":\"Task 1\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/edit", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"name\":\"New Name\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "sort", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/sort", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"preTaskCode\":\"xxx\",\"nextTaskCode\":\"xxx\",\"toStageCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "taskDone", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/taskDone", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"done\":true}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "selfList", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/selfList", "body": { "mode": "raw", "raw": "{\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "read", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/read", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "taskLog", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/taskLog", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "workTimeList", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/_taskWorkTimeList", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "saveTaskWorkTime", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/saveTaskWorkTime", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"beginTime\":\"2026-01-01\",\"num\":2,\"content\":\"work\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "editTaskWorkTime", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/editTaskWorkTime", "body": { "mode": "raw", "raw": "{\"id\":1,\"beginTime\":\"2026-01-01\",\"num\":3,\"content\":\"updated\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "delTaskWorkTime", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/delTaskWorkTime", "body": { "mode": "raw", "raw": "{\"id\":1}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "taskSources", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/taskSources", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "createComment", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/createComment", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"comment\":\"good job\",\"mentions\":[]}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recycle", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/recycle", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "delete", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/delete", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recovery", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/recovery", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "assignTask", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/assignTask", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"memberCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "batchAssignTask", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/batchAssignTask", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"memberCodes\":[\"xxx\"]}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "like", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/like", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "star", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/star", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "setPrivate", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/setPrivate", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"private\":true}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recycleBatch", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/recycleBatch", "body": { "mode": "raw", "raw": "{\"taskCodes\":[\"xxx\"]}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "dateTotalForProject", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task/dateTotalForProject", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "listByProject", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "TaskMember",
+      "item": [
+        { "name": "list", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_member", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "inviteMemberBatch", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_member/inviteMemberBatch", "body": { "mode": "raw", "raw": "{\"taskCode\":\"xxx\",\"memberCodes\":[\"xxx\"]}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "File",
+      "item": [
+        { "name": "uploadFiles", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/file/uploadFiles", "body": { "mode": "formdata", "formdata": [{"key":"file","type":"file","src":""},{"key":"projectCode","value":"xxx","type":"text"},{"key":"taskCode","value":"xxx","type":"text"}] } } },
+        { "name": "index", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/file", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "read", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/file/read", "body": { "mode": "raw", "raw": "{\"fileCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/file/edit", "body": { "mode": "raw", "raw": "{\"fileCode\":\"xxx\",\"title\":\"new title\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recycle", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/file/recycle", "body": { "mode": "raw", "raw": "{\"fileCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "recovery", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/file/recovery", "body": { "mode": "raw", "raw": "{\"fileCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "delete", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/file/delete", "body": { "mode": "raw", "raw": "{\"fileCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Account",
+      "item": [
+        { "name": "list", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "_allList", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/_allList", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "add", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/add", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"memberCode\":\"xxx\",\"roleCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/edit", "body": { "mode": "raw", "raw": "{\"id\":1,\"roleCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "forbid", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/forbid", "body": { "mode": "raw", "raw": "{\"id\":1}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "resume", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/resume", "body": { "mode": "raw", "raw": "{\"id\":1}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "auth", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/auth", "body": { "mode": "raw", "raw": "{\"id\":1,\"authCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "del", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/del", "body": { "mode": "raw", "raw": "{\"id\":1}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "read", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/read", "body": { "mode": "raw", "raw": "{\"id\":1}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "_syncDetail", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/_syncDetail", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "_joinByInviteLink", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/account/_joinByInviteLink", "body": { "mode": "raw", "raw": "{\"inviteCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Department",
+      "item": [
+        { "name": "list", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department", "body": { "mode": "raw", "raw": "{\"organizationCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "save", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department/save", "body": { "mode": "raw", "raw": "{\"organizationCode\":\"xxx\",\"name\":\"Dev Team\",\"pcode\":\"\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "read", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department/read", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department/edit", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\",\"name\":\"New Name\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "delete", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department/delete", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "DepartmentMember",
+      "item": [
+        { "name": "index", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department_member/index", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "searchInvite", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department_member/searchInviteMember", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\",\"keyword\":\"test\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "invite", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department_member/inviteMember", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\",\"memberCodes\":[\"xxx\"]}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "removeMember", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department_member/removeMember", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\",\"memberCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "detail", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/department_member/detail", "body": { "mode": "raw", "raw": "{\"departmentCode\":\"xxx\",\"memberCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        { "name": "list", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth", "body": { "mode": "raw", "raw": "{\"organizationCode\":\"xxx\",\"page\":1,\"pageSize\":10}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "apply", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth/apply", "body": { "mode": "raw", "raw": "{\"authCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "add", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth/add", "body": { "mode": "raw", "raw": "{\"organizationCode\":\"xxx\",\"name\":\"Admin\",\"desc\":\"\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth/edit", "body": { "mode": "raw", "raw": "{\"authCode\":\"xxx\",\"name\":\"New Name\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "forbid", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth/forbid", "body": { "mode": "raw", "raw": "{\"authCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "resume", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth/resume", "body": { "mode": "raw", "raw": "{\"authCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "setDefault", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth/setDefault", "body": { "mode": "raw", "raw": "{\"authCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "del", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/auth/del", "body": { "mode": "raw", "raw": "{\"authCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Menu",
+      "item": [
+        { "name": "menuList", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/menu/menu", "body": { "mode": "raw", "raw": "{}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "TaskTag",
+      "item": [
+        { "name": "list", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_tag", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "save", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_tag/save", "body": { "mode": "raw", "raw": "{\"projectCode\":\"xxx\",\"name\":\"Bug\",\"color\":\"#ff0000\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "edit", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_tag/edit", "body": { "mode": "raw", "raw": "{\"tagCode\":\"xxx\",\"name\":\"Feature\",\"color\":\"#00ff00\"}", "options": {"raw":{"language":"json"}} } } },
+        { "name": "delete", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/task_tag/delete", "body": { "mode": "raw", "raw": "{\"tagCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "Node",
+      "item": [
+        { "name": "nodeList", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/node", "body": { "mode": "raw", "raw": "{}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    },
+    {
+      "name": "SourceLink",
+      "item": [
+        { "name": "delete", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/project/source_link/delete", "body": { "mode": "raw", "raw": "{\"linkCode\":\"xxx\"}", "options": {"raw":{"language":"json"}} } } }
+      ]
+    }
+  ]
+}
