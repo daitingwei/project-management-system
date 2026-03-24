@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.opentelemetry.io/otel"
@@ -32,7 +33,7 @@ func main() {
 	//路由
 	router.InitRouter(r)
 	//开启pprof 默认的访问路径是/debug/pprof
-	//pprof.Register(r)
+	pprof.Register(r)
 	////测试代码
 	//r.GET("/mem", func(c *gin.Context) {
 	//	// 业务代码运行

@@ -1,3 +1,4 @@
+name: msproject
 services:
   mysql:
     container_name: mysql8
@@ -137,7 +138,6 @@ services:
     container_name: nacos-standalone
     image: nacos/nacos-server:v2.2.0
     restart: always
-    platform: linux/arm64
     environment:
       - MODE=standalone
       - JVM_XMS=512m

@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/resolver"
@@ -75,7 +76,7 @@ func RegisterGrpc() *grpc.Server {
 		}}
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-			//otelgrpc.UnaryServerInterceptor(),
+			otelgrpc.UnaryServerInterceptor(),
 			interceptor.New().CacheInterceptor(),
 		)),
 	)

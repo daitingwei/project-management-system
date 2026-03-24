@@ -25,11 +25,11 @@ type JaegerConfig struct {
 }
 
 type MinioConfig struct {
-	Endpoint   string
-	AccessKey  string
-	SecretKey  string
-	Bucket     string
-	UseSSL     bool
+	Endpoint  string
+	AccessKey string
+	SecretKey string
+	Bucket    string
+	UseSSL    bool
 }
 type ServerConfig struct {
 	Name string
